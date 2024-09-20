@@ -16,7 +16,7 @@ jobs:
     strategy:
       matrix:
         os: [macos-latest, windows-latest]
-        package_manager: [npm, yarn]
+        package_manager: [yarn]
 
     steps:
       - name: Check out Git repository
@@ -55,5 +55,6 @@ jobs:
             This is an automated release.
             It contains the latest changes from the main branch.
             Please refer to the commit history for more details.
+          tag: ${{ github.sha }}
           draft: false
           prerelease: false
