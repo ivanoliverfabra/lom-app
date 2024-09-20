@@ -8,6 +8,10 @@ on:
 jobs:
   release:
     runs-on: ${{ matrix.os }}
+    permissions:
+      contents: read
+      packages: write
+      actions: write
 
     strategy:
       matrix:
@@ -29,10 +33,6 @@ jobs:
       - name: Build Electron app
         run: npm run make
 
-      - name: Install Squirrel dependencies (Windows only)
-        if: matrix.os == 'windows-latest'
-        run: choco install squirrel.windows
-
       - name: Package Electron app
         run: npm run package
 
@@ -40,7 +40,20 @@ jobs:
         run: npm run publish
 
       - name: Upload Release Assets
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4.4.0
         with:
           name: release-artifacts
           path: out/make
+
+      - name: Publish Release
+        uses: softprops/action-gh-release@v2.0.8
+        with:
+          files: out/make/*
+          token: ${{ secrets.GITHUB_TOKEN }}
+          release_name: Release ${{ github.sha }}
+          body: |
+            This is an automated release.
+            It contains the latest changes from the main branch.
+            Please refer to the commit history for more details.
+          draft: false
+          prerelease: false
