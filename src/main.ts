@@ -6,6 +6,8 @@ import installExtension, { REACT_DEVELOPER_TOOLS } from 'electron-devtools-insta
 import { createAppWindow } from './appWindow';
 import { initDatabase } from './database';
 
+if (require('electron-squirrel-startup')) app.quit();
+
 process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = 'true';
 
 if (require('electron-squirrel-startup')) {
