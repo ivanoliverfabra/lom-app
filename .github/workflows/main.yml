@@ -11,7 +11,7 @@ jobs:
 
     strategy:
       matrix:
-        os: [macos-latest, ubuntu-latest, windows-latest]
+        os: [macos-latest, windows-latest]
         package_manager: [npm, yarn]
 
     steps:
@@ -28,12 +28,6 @@ jobs:
 
       - name: Build Electron app
         run: npm run make
-
-      - name: Install RPM build dependencies (Linux only)
-        if: matrix.os == 'ubuntu-latest'
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y rpm fakeroot dpkg
 
       - name: Install Squirrel dependencies (Windows only)
         if: matrix.os == 'windows-latest'

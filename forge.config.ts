@@ -1,7 +1,6 @@
 /* eslint-disable import/order */
 import path from 'path';
 
-import { MakerRpm } from '@electron-forge/maker-rpm';
 import { MakerSquirrel } from '@electron-forge/maker-squirrel';
 import { MakerZIP } from '@electron-forge/maker-zip';
 import { FusesPlugin } from '@electron-forge/plugin-fuses';
@@ -32,12 +31,6 @@ const config: ForgeConfig = {
       setupIcon: 'assets/icons/icon.ico',
     }),
     new MakerZIP({}, ['darwin']),
-    new MakerRpm({
-      options: {
-        productName,
-        icon: 'assets/icons/icon.png',
-      },
-    }),
   ],
   plugins: [
     new VitePlugin({
