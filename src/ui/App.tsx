@@ -1,12 +1,14 @@
 import React from 'react';
-import { HashRouter as Router, Route, Routes } from 'react-router-dom';
+import { Route, HashRouter as Router, Routes } from 'react-router-dom';
 
 import { MenuChannels } from 'src/channels/menuChannels';
 import { useRendererListener, useThemeListener } from 'src/ui/hooks';
-import Menu from 'ui/components/Menu';
 import Titlebar from 'ui/components/Titlebar';
 import WindowControls from 'ui/components/WindowControls';
 import Home from 'ui/screens/Home';
+
+import Layout from './components/Layout';
+import Menu from './components/Menu';
 
 const onMenuEvent = (_: Electron.IpcRendererEvent, channel: string, ...args: any[]) => {
   electron.ipcRenderer.invoke(channel, args);
@@ -31,9 +33,11 @@ export default function App() {
           </>
         )}
       </Titlebar>
-      <Routes>
-        <Route path='/' Component={Home} />
-      </Routes>
+      <Layout>
+        <Routes>
+          <Route path='/' Component={Home} />
+        </Routes>
+      </Layout>
     </Router>
   );
 }

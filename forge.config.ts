@@ -1,6 +1,6 @@
+/* eslint-disable import/order */
 import path from 'path';
 
-import { FuseV1Options, FuseVersion } from '@electron/fuses';
 import { MakerDeb } from '@electron-forge/maker-deb';
 import { MakerRpm } from '@electron-forge/maker-rpm';
 import { MakerSquirrel } from '@electron-forge/maker-squirrel';
@@ -8,6 +8,7 @@ import { MakerZIP } from '@electron-forge/maker-zip';
 import { FusesPlugin } from '@electron-forge/plugin-fuses';
 import { VitePlugin } from '@electron-forge/plugin-vite';
 import type { ForgeConfig } from '@electron-forge/shared-types';
+import { FuseV1Options, FuseVersion } from '@electron/fuses';
 
 import { productName } from './package.json';
 
@@ -18,14 +19,33 @@ const config: ForgeConfig = {
     // Create asar archive for main, renderer process files
     asar: true,
     // Set executable name
-    executableName: productName,
+    executableName: 'Legend of Mushroom',
     // Set application copyright
-    appCopyright: 'Copyright (C) 2024 Flavio Del Grosso',
+    appCopyright: 'Copyright (C) 2024 Fabra',
     // Set application icon
     icon: path.resolve(rootDir, 'assets/icons/icon'),
   },
   rebuildConfig: {},
-  makers: [new MakerSquirrel({ name: productName }), new MakerZIP({}, ['darwin']), new MakerRpm({}), new MakerDeb({})],
+  makers: [
+    new MakerSquirrel({
+      name: productName,
+      iconUrl: 'https://utfs.io/f/6lmjelcPneS1Zq5Ndc9Gij5UzbakgYZQwhqN32oGcr7D4XmP',
+      setupIcon: 'assets/icons/icon.ico',
+    }),
+    new MakerZIP({}, ['darwin']),
+    new MakerRpm({
+      options: {
+        productName,
+        icon: 'assets/icons/icon.png',
+      },
+    }),
+    new MakerDeb({
+      options: {
+        productName,
+        icon: 'assets/icons/icon.png',
+      },
+    }),
+  ],
   plugins: [
     new VitePlugin({
       // `build` can specify multiple entry builds, which can be Main process, Preload scripts, Worker process, etc.

@@ -32,9 +32,9 @@ export const globals = {
       }
     },
 
-    invoke(channel: string, ...args: any[]) {
+    invoke<T = unknown>(channel: string, ...args: any[]) {
       if (validateIPC(channel)) {
-        return ipcRenderer.invoke(channel, ...args);
+        return ipcRenderer.invoke(channel, ...args) as Promise<T>;
       }
     },
 

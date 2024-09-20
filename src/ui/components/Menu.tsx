@@ -1,141 +1,68 @@
-import React, { createRef, useMemo, useRef } from 'react';
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+import React, { useCallback, useState, type MouseEvent } from 'react';
 
-import appLogo from 'assets/icons/icon.png';
+import logo from 'assets/icons/icon.png';
 import { MenuChannels } from 'src/channels/menuChannels';
-import { fixAcceleratorText } from 'src/menu/accelerators';
-import menuList from 'src/menu/appMenu';
-import { useEventListener } from 'src/ui/hooks';
 
 export default function Menu() {
-  const activeMenuIndex = useRef<number | null>(null);
-  const menusRef = useMemo(() => menuList.map(() => createRef<HTMLDivElement>()), []);
+  const [isDragging, setIsDragging] = useState(false);
+  const [initialMousePosition, setInitialMousePosition] = useState({ x: 0, y: 0 });
+  const [windowPosition, setWindowPosition] = useState({ x: 0, y: 0 });
 
-  useEventListener('keydown', (event) => handleKeyDown(event));
+  const getPosition = useCallback(() => {
+    return new Promise<[number, number]>((resolve, reject) => {
+      electron.ipcRenderer
+        .invoke(MenuChannels.WINDOW_GET_POSITION)
+        .then((pos: [number, number]) => {
+          setWindowPosition({ x: pos[0], y: pos[1] });
+          resolve(pos);
+        })
+        .catch((error: Error) => {
+          reject(error);
+        });
+    });
+  }, []);
 
-  useEventListener('mousedown', (event) => handleClickOutside(event));
+  const dragWindow = useCallback(
+    (e: MouseEvent<HTMLDivElement, globalThis.MouseEvent>) => {
+      if (!isDragging) return;
 
-  const handleKeyDown = (e: KeyboardEvent) => {
-    if (e.repeat) return;
-    if (e.altKey) activeMenuIndex.current && closeActiveMenu();
-  };
+      const deltaX = e.screenX - initialMousePosition.x;
+      const deltaY = e.screenY - initialMousePosition.y;
 
-  const handleClickOutside = (event: MouseEvent) => {
-    if (activeMenuIndex.current != null) {
-      if (
-        menusRef[activeMenuIndex.current].current &&
-        !menusRef[activeMenuIndex.current].current?.contains(event.target as Node)
-      ) {
-        closeActiveMenu();
-      }
-    }
-  };
+      const newX = windowPosition.x + deltaX;
+      const newY = windowPosition.y + deltaY;
 
-  const showMenu = (index: number, e: React.MouseEvent<HTMLDivElement> | React.KeyboardEvent<HTMLDivElement>) => {
-    e.stopPropagation();
-    e.preventDefault();
+      electron.ipcRenderer.invoke(MenuChannels.WINDOW_DRAG, [newX, newY]);
+    },
+    [isDragging, initialMousePosition, windowPosition],
+  );
 
-    if (menusRef[index].current?.classList.contains('active')) {
-      closeActiveMenu();
-    } else {
-      menusRef[index].current?.classList.add('active');
-      menusRef[index].current?.parentElement?.classList.add('active');
-      activeMenuIndex.current = index;
-    }
-  };
+  const startDragging = useCallback(
+    (e: MouseEvent<HTMLDivElement, globalThis.MouseEvent>) => {
+      // Get initial mouse and window positions
+      getPosition().then(() => {
+        setInitialMousePosition({ x: e.screenX, y: e.screenY });
+        setIsDragging(true);
+      });
+    },
+    [getPosition],
+  );
 
-  const onMenuHover = (index: number) => {
-    if (activeMenuIndex.current != null) {
-      menusRef[activeMenuIndex.current].current?.classList.toggle('active');
-      menusRef[index].current?.classList.toggle('active');
-      menusRef[index].current?.parentElement?.classList.toggle('active');
-      menusRef[activeMenuIndex.current].current?.parentElement?.classList.toggle('active');
-
-      activeMenuIndex.current = index;
-    }
-  };
-
-  const closeActiveMenu = () => {
-    if (activeMenuIndex.current != null) {
-      menusRef[activeMenuIndex.current].current?.classList.remove('active');
-      menusRef[activeMenuIndex.current].current?.parentElement?.classList.remove('active');
-      activeMenuIndex.current = null;
-    }
-  };
-
-  const handleAction = (menuItem: Electron.MenuItemConstructorOptions) => {
-    closeActiveMenu();
-    const actionId = menuItem.id;
-    if (actionId) {
-      if (actionId === MenuChannels.OPEN_GITHUB_PROFILE) {
-        return electron.ipcRenderer.invoke(actionId, menuItem.label);
-      }
-      return electron.ipcRenderer.send(MenuChannels.EXECUTE_MENU_ITEM_BY_ID, actionId);
-    }
-  };
-
-  const renderItemAccelerator = (menuItem: Electron.MenuItemConstructorOptions) => {
-    if (menuItem.id === MenuChannels.WEB_ZOOM_IN) {
-      const firstKey = __DARWIN__ ? '⌘' : 'Ctrl';
-      const plus = __DARWIN__ ? '' : '+';
-      const thirdKey = '+';
-      return `${firstKey}${plus}${thirdKey}`;
-    }
-
-    if (menuItem.accelerator) {
-      return fixAcceleratorText(menuItem.accelerator);
-    }
-  };
+  const stopDragging = useCallback(() => {
+    setIsDragging(false);
+  }, []);
 
   return (
-    <section className='window-titlebar-menu'>
-      {/* Titlebar icon */}
-      <section className='window-titlebar-icon'>
-        <img src={appLogo} alt='App logo' />
-      </section>
-
-      {menuList.map(({ label, submenu }, menuIndex) => {
-        return (
-          <div className='menu-item' key={`menu_${menuIndex}`}>
-            <div
-              className='menu-title'
-              role='button'
-              tabIndex={0}
-              onClick={(e) => showMenu(menuIndex, e)}
-              onKeyDown={(e) => showMenu(menuIndex, e)}
-              onMouseEnter={() => onMenuHover(menuIndex)}
-              onDoubleClick={(e) => e.stopPropagation()}
-              onMouseDown={(e) => e.preventDefault()}
-            >
-              {label}
-            </div>
-            <div className='menu-popup' ref={menusRef[menuIndex]}>
-              {Array.isArray(submenu) &&
-                submenu.map((menuItem, menuItemIndex) => {
-                  if (menuItem.type === 'separator') {
-                    return (
-                      <div key={`menu_${menuIndex}_popup_item_${menuItemIndex}`} className='popup-item-separator' />
-                    );
-                  }
-
-                  return (
-                    <div
-                      key={`menu_${menuIndex}_popup_item_${menuItemIndex}`}
-                      className='menu-popup-item'
-                      onMouseDown={(e) => e.preventDefault()}
-                      onKeyDown={(e) => e.preventDefault()}
-                      role='button'
-                      tabIndex={0}
-                      onClick={() => handleAction(menuItem)}
-                    >
-                      <div className='popup-item-name'>{menuItem.label}</div>
-                      <div className='popup-item-shortcut'>{renderItemAccelerator(menuItem)}</div>
-                    </div>
-                  );
-                })}
-            </div>
-          </div>
-        );
-      })}
-    </section>
+    <div
+      className={`flex items-center gap-x-2 select-none w-full flex-grow${isDragging ? ' cursor-grabbing' : ' cursor-grab'}`}
+      onMouseDown={startDragging}
+      onMouseMove={dragWindow}
+      onMouseUp={stopDragging}
+      onMouseLeave={stopDragging}
+    >
+      <img src={logo} alt='logo' className='h-6 rounded-md' />
+      <h2 className='text-white text-sm'>Legend of Mushroom</h2>
+    </div>
   );
 }

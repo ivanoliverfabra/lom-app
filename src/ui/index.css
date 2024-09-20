@@ -1,0 +1,38 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: 'Titillium';
+  src: url('../../../assets/fonts/titillium/TitilliumWeb-Regular.ttf');
+}
+
+@layer base {
+  * {
+    @apply border-gray-700 focus:!ring-0 focus:outline-none;
+  }
+  body {
+    font-family: 'Titillium', sans-serif;
+    @apply text-white;
+  }
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  /* Customize scrollbar track */
+  ::-webkit-scrollbar-track {
+    background: #333;
+  }
+
+  /* Customize scrollbar handle */
+  ::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+  }
+
+  /* Handle hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+}

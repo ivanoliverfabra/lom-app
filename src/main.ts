@@ -1,59 +1,44 @@
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, net, protocol } from 'electron';
+import path from 'node:path';
 
 import installExtension, { REACT_DEVELOPER_TOOLS } from 'electron-devtools-installer';
 
 import { createAppWindow } from './appWindow';
+import { initDatabase } from './database';
 
 process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = 'true';
 
-/** Handle creating/removing shortcuts on Windows when installing/uninstalling. */
 if (require('electron-squirrel-startup')) {
   app.quit();
 }
+
+protocol.registerSchemesAsPrivileged([{ scheme: 'atom', privileges: { standard: true, secure: true } }]);
 
 app.whenReady().then(() => {
   installExtension(REACT_DEVELOPER_TOOLS)
     .then((name) => console.info(`Added Extension:  ${name}`))
     .catch((err) => console.info('An error occurred: ', err));
+
+  protocol.handle('atom', (req) => {
+    const pathToServe = req.url.replace('atom://', '');
+    if (pathToServe.startsWith('images/avatars/')) {
+      return net.fetch(path.join(app.getPath('userData'), 'images/avatars', pathToServe.split('/').pop()));
+    }
+  });
 });
 
-/**
- * This method will be called when Electron has finished
- * initialization and is ready to create browser windows.
- * Some APIs can only be used after this event occurs.
- */
-app.on('ready', createAppWindow);
+app.on('ready', () => createAppWindow('profiles'));
 
-/**
- * Emitted when the application is activated. Various actions can
- * trigger this event, such as launching the application for the first time,
- * attempting to re-launch the application when it's already running,
- * or clicking on the application's dock or taskbar icon.
- */
 app.on('activate', () => {
-  /**
-   * On OS X it's common to re-create a window in the app when the
-   * dock icon is clicked and there are no other windows open.
-   */
   if (BrowserWindow.getAllWindows().length === 0) {
-    createAppWindow();
+    createAppWindow('profiles');
   }
 });
 
-/**
- * Emitted when all windows have been closed.
- */
 app.on('window-all-closed', () => {
-  /**
-   * On OS X it is common for applications and their menu bar
-   * to stay active until the user quits explicitly with Cmd + Q
-   */
   if (process.platform !== 'darwin') {
     app.quit();
   }
 });
 
-/**
- * In this file you can include the rest of your app's specific main process code.
- * You can also put them in separate files and import them here.
- */
+export const db = initDatabase();
