@@ -6,16 +6,28 @@ permissions:
 on:
   push:
     tags:
-      - v[0-9]+.*
+      - v[0-9]+.* # Trigger the workflow when a version tag is pushed
 
 jobs:
-  create-release:
+  release:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
-      - uses: taiki-e/create-gh-release-action@v1
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
         with:
-          # (optional) Path to changelog.
-          # changelog: CHANGELOG.md
-          # (required) GitHub token for creating GitHub Releases.
-          token: ${{ secrets.GITHUB_TOKEN }}
+          node-version: '16' # Adjust the Node.js version if needed
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build Electron App
+        run: npm run build # Make sure your project has a `build` script
+
+      - name: Electron Builder Action
+        uses: samuelmeuli/action-electron-builder@v1.6.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }} # Ensure you have the token for accessing GitHub releases
