@@ -30,11 +30,23 @@ const config: ForgeConfig = {
       iconUrl: 'https://utfs.io/f/6lmjelcPneS1Zq5Ndc9Gij5UzbakgYZQwhqN32oGcr7D4XmP',
       setupIcon: 'assets/icons/icon.ico',
     }),
-    new MakerDMG({
-      name: productName,
-      icon: 'assets/icons/icon.icns',
-      format: 'ULFO',
-    }),
+    new MakerDMG(
+      {
+        name: productName,
+        icon: 'assets/icons/icon.icns',
+        format: 'ULFO',
+        contents: [
+          {
+            x: 192,
+            y: 240,
+            type: 'file',
+            path: `${process.cwd()}/out/${productName}-darwin-x64/${productName}.app`,
+          },
+          { x: 466, y: 240, type: 'link', path: '/Applications' },
+        ],
+      },
+      ['darwin'],
+    ),
   ],
   plugins: [
     new VitePlugin({
