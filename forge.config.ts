@@ -1,7 +1,6 @@
 /* eslint-disable import/order */
 import path from 'path';
 
-import { MakerDeb } from '@electron-forge/maker-deb';
 import { MakerRpm } from '@electron-forge/maker-rpm';
 import { MakerSquirrel } from '@electron-forge/maker-squirrel';
 import { MakerZIP } from '@electron-forge/maker-zip';
@@ -34,12 +33,6 @@ const config: ForgeConfig = {
     }),
     new MakerZIP({}, ['darwin']),
     new MakerRpm({
-      options: {
-        productName,
-        icon: 'assets/icons/icon.png',
-      },
-    }),
-    new MakerDeb({
       options: {
         productName,
         icon: 'assets/icons/icon.png',
