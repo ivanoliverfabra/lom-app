@@ -35,6 +35,7 @@
     "email": "ivan@bloomlabs.me"
   },
   "dependencies": {
+    "@electron-forge/maker-dmg": "^7.4.0",
     "@radix-ui/react-context-menu": "^2.2.1",
     "@radix-ui/react-dialog": "^1.1.1",
     "@radix-ui/react-slot": "^1.1.0",
