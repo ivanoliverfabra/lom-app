@@ -42,6 +42,8 @@ const config: ForgeConfig = {
     new MakerDeb({
       options: {
         productName,
+        name: 'legend-of-mushroom',
+        genericName: 'Legend of Mushroom',
         icon: 'assets/icons/icon.png',
       },
     }),
