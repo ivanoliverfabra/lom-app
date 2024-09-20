@@ -47,13 +47,6 @@ jobs:
           name: release-artifacts
           path: out/make
 
-      - name: Verify zip files exist
-        run: |
-          if [ ! -f "out/make/*.zip" ]; then
-            echo "No zip files found in out/make/. Exiting."
-            exit 1
-          fi
-
       - name: Publish Release
         run: |
-          gh release create ${{ github.ref_name }} $(ls out/make/*.zip) --generate-notes --title "Version ${{ github.ref_name }}"
+          gh release create ${{ github.ref_name }} out/make --generate-notes --title "Version ${{ github.ref_name }}"
