@@ -50,11 +50,11 @@ jobs:
         with:
           files: out/make/*
           token: ${{ secrets.GITHUB_TOKEN }}
-          release_name: Release ${{ github.sha }}
+          name: Release ${{ github.sha }}
           body: |
             This is an automated release.
             It contains the latest changes from the main branch.
             Please refer to the commit history for more details.
-          tag: ${{ github.sha }}
+          tag__name: ${{ github.sha }}
           draft: false
           prerelease: false
