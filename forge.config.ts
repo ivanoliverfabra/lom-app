@@ -19,7 +19,7 @@ const config: ForgeConfig = {
     // Create asar archive for main, renderer process files
     asar: true,
     // Set executable name
-    executableName: 'Legend of Mushroom',
+    executableName: 'LegendOfMushroom',
     // Set application copyright
     appCopyright: 'Copyright (C) 2024 Fabra',
     // Set application icon
@@ -42,8 +42,6 @@ const config: ForgeConfig = {
     new MakerDeb({
       options: {
         productName,
-        name: 'legend-of-mushroom',
-        genericName: 'Legend of Mushroom',
         icon: 'assets/icons/icon.png',
       },
     }),
