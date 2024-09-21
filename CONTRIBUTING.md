@@ -1,4 +1,4 @@
-# Contributing to [project name]
+# Contributing to LegendOfMushroom
 
 Thank you for your interest in contributing to this project! Here are some guidelines to help you get started.
 
@@ -19,8 +19,8 @@ Please note that this project is released with a Contributor Code of Conduct. By
 To set up your development environment, follow these steps:
 
 1. Clone this repository.
-2. Install dependencies with `yarn install`.
-3. Run the application with `yarn start`.
+2. Install dependencies with `bun install`.
+3. Run the application with `bun start`.
 
 ## License
 

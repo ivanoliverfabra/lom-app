@@ -1,7 +1,7 @@
 {
   "name": "legend-of-mushroom",
   "productName": "LegendOfMushroom",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Legend of Mushroom Desktop Client",
   "main": ".vite/build/main.js",
   "license": "MIT",
@@ -10,6 +10,7 @@
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
+    "build": "bun run make && bun run package && bun run publish",
     "check-types": "tsc --project tsconfig.json --pretty --noEmit",
     "check-format": "npm run prettier -- --list-different",
     "validate-and-build": "npm-run-all --parallel check-types check-format lint build",
