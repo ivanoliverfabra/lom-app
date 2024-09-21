@@ -24,7 +24,7 @@ const WindowSettings: Record<AppWindowType, AppWindowSettings> = {
     height: 927,
     title: 'Legend of Mushroom - Client',
     url: 'https://lom.joynetgame.com/',
-    resizable: true,
+    resizable: false,
     frame: true,
     webPreferences: {
       nodeIntegration: false,
@@ -42,7 +42,7 @@ const WindowSettings: Record<AppWindowType, AppWindowSettings> = {
     height: 927,
     title: 'Legend of Mushroom - Client',
     url: 'https://lom.joynetgame.com/',
-    resizable: true,
+    resizable: false,
     frame: true,
     webPreferences: {
       nodeIntegration: false,
@@ -61,7 +61,7 @@ const WindowSettings: Record<AppWindowType, AppWindowSettings> = {
     title: 'Legend of Mushroom - Profiles',
     transparent: true,
     autoHideMenuBar: true,
-    resizable: true,
+    resizable: false,
     frame: false,
     webPreferences: {
       nodeIntegration: false,

@@ -75,3 +75,13 @@ type Instance = {
 };
 
 type IPCState = 'creating-profile' | 'editing-profile' | 'deleting-profile' | 'selecting-profile' | 'loading-profiles';
+
+type WebsocketInfoType<D extends Record<string, unknown> | string> = {
+  requestId: string;
+  response: {
+    mask: boolean;
+    opcode: number;
+    payloadData: D;
+  };
+  timestamp: number;
+};
