@@ -18,8 +18,8 @@ type AppWindowSettings = Electron.BrowserWindowConstructorOptions & {
 
 const WindowSettings: Record<AppWindowType, AppWindowSettings> = {
   'new-instance': {
-    minWidth: 521,
-    minHeight: 927,
+    minWidth: 300,
+    minHeight: 500,
     width: 521,
     height: 927,
     title: 'Legend of Mushroom - Client',
@@ -36,8 +36,8 @@ const WindowSettings: Record<AppWindowType, AppWindowSettings> = {
     },
   },
   'guest-instance': {
-    minWidth: 521,
-    minHeight: 927,
+    minWidth: 300,
+    minHeight: 500,
     width: 521,
     height: 927,
     title: 'Legend of Mushroom - Client',
