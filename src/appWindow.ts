@@ -18,11 +18,13 @@ type AppWindowSettings = Electron.BrowserWindowConstructorOptions & {
 
 const WindowSettings: Record<AppWindowType, AppWindowSettings> = {
   'new-instance': {
+    minWidth: 521,
+    minHeight: 927,
     width: 521,
     height: 927,
     title: 'Legend of Mushroom - Client',
     url: 'https://lom.joynetgame.com/',
-    resizable: false,
+    resizable: true,
     frame: true,
     webPreferences: {
       nodeIntegration: false,
@@ -34,11 +36,13 @@ const WindowSettings: Record<AppWindowType, AppWindowSettings> = {
     },
   },
   'guest-instance': {
+    minWidth: 521,
+    minHeight: 927,
     width: 521,
     height: 927,
     title: 'Legend of Mushroom - Client',
     url: 'https://lom.joynetgame.com/',
-    resizable: false,
+    resizable: true,
     frame: true,
     webPreferences: {
       nodeIntegration: false,
@@ -50,12 +54,14 @@ const WindowSettings: Record<AppWindowType, AppWindowSettings> = {
     },
   },
   profiles: {
+    minWidth: 600,
+    minHeight: 400,
     width: 800,
     height: 600,
     title: 'Legend of Mushroom - Profiles',
     transparent: true,
     autoHideMenuBar: true,
-    resizable: false,
+    resizable: true,
     frame: false,
     webPreferences: {
       nodeIntegration: false,
