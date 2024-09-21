@@ -74,7 +74,7 @@
 
 ## About The Project
 
-[![LegendOfMushroom Screen Shot][product-screenshot]]
+![LegendOfMushroom Screen Shot][product-screenshot]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
