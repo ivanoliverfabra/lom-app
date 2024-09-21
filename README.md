@@ -32,11 +32,11 @@
     <img src="https://utfs.io/f/6lmjelcPneS1pnWEjKBU9n0Wxrkq5THQXO1C7ahDyESMYNze" alt="Logo" width="80" height="80">
   </a>
 
-<h3 align="center">LegendOfMushroom</h3>
+  <h3 align="center">LegendOfMushroom</h3>
 
   <p align="center">
-    This is a simple client wrapper for [Legend of Mushroom](https://lom.joynetgame.com/) game. 
-    It is written in Typescript and uses [React](https://reactjs.org/) for the profile management and [Electron](https://www.electronjs.org/) for the entire client.
+    This is a simple client wrapper for the <a href="https://lom.joynetgame.com/">Legend of Mushroom</a> game. 
+    It is written in TypeScript and uses <a href="https://reactjs.org/">React</a> for profile management and <a href="https://www.electronjs.org/">Electron</a> for the entire client.
     <br />
     <br />
     <a href="https://github.com/ivanoliverfabra/lom-app/issues/new?labels=bug&template=bug-report---.md">Report Bug</a>
