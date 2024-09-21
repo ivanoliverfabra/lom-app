@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 
 import { useDialogStore } from 'src/providers/dialogStoreProvider';
+import { useIPCStore } from 'src/providers/ipcStoreProvider';
 import { useProfileStore } from 'src/providers/profileStoreProvider';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from 'src/ui/components/ui/Dialog';
 
@@ -13,12 +14,19 @@ function CreateProfileDialog() {
   const [image, setImage] = useState<File>(null);
   const [error, setError] = useState('');
 
+  const setState = useIPCStore((state) => state.set);
   const createProfile = useProfileStore((state) => state.create);
   const isOpen = useDialogStore((state) => state.isOpen);
   const close = useDialogStore((state) => state.close);
 
   return (
-    <Dialog open={isOpen === 'create-profile'} onOpenChange={() => close()}>
+    <Dialog
+      open={isOpen === 'create-profile'}
+      onOpenChange={() => {
+        close();
+        setState('selecting-profile');
+      }}
+    >
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Create a new profile</DialogTitle>
@@ -91,6 +99,7 @@ function EditProfileDialog() {
   const [name, setName] = useState('');
   const [error, setError] = useState('');
 
+  const setState = useIPCStore((state) => state.set);
   const updateProfile = useProfileStore((state) => state.update);
   const isOpen = useDialogStore((state) => state.isOpen);
   const close = useDialogStore((state) => state.close);
@@ -99,7 +108,13 @@ function EditProfileDialog() {
   if (!data?.name || !('id' in data)) return null;
 
   return (
-    <Dialog open={isOpen === 'update-profile'} onOpenChange={() => close()}>
+    <Dialog
+      open={isOpen === 'update-profile'}
+      onOpenChange={() => {
+        close();
+        setState('selecting-profile');
+      }}
+    >
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Edit profile {data?.name}</DialogTitle>

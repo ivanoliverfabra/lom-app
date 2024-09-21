@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
 
 const versions: Record<string, unknown> = {};
@@ -32,7 +33,7 @@ export const globals = {
       }
     },
 
-    invoke<T = unknown>(channel: string, ...args: any[]) {
+    invoke<T = unknown, A extends unknown[] = unknown[]>(channel: string, ...args: A): Promise<T> | undefined {
       if (validateIPC(channel)) {
         return ipcRenderer.invoke(channel, ...args) as Promise<T>;
       }

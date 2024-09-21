@@ -1,13 +1,16 @@
 import React from 'react';
 
 import { useDialogStore } from 'src/providers/dialogStoreProvider';
+import { useIPCStore } from 'src/providers/ipcStoreProvider';
 import { useProfileStore } from 'src/providers/profileStoreProvider';
 import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger } from 'src/ui/components/ui/ContextMenu';
 
 import ProfileAvatar from '../components/ui/ProfileAvatar';
 
 function Home() {
+  const setState = useIPCStore((store) => store.set);
   const profiles = useProfileStore((store) => store.profiles);
+  setState('selecting-profile');
 
   const deleteProfile = useProfileStore((store) => store.delete);
   const selectProfile = useProfileStore((store) => store.select);
@@ -43,6 +46,7 @@ function Home() {
                   onClick={(e) => {
                     e.preventDefault();
                     openDialog('update-profile', profile);
+                    setState('editing-profile', profile.id);
                   }}
                 >
                   Edit Profile
@@ -50,7 +54,10 @@ function Home() {
                 <ContextMenuItem
                   onClick={(e) => {
                     e.preventDefault();
-                    deleteProfile(profile.id);
+                    setState('deleting-profile', profile.id);
+                    deleteProfile(profile.id).then(() => {
+                      setState('selecting-profile');
+                    });
                   }}
                 >
                   Delete Profile
@@ -62,7 +69,10 @@ function Home() {
           <button
             className='hover:bg-gray-800 focus:bg-gray-800 p-3 flex flex-col items-center justify-center rounded-lg text-center border border-gray-600 min-w-[200px]'
             type='button'
-            onClick={() => openDialog('create-profile')}
+            onClick={() => {
+              openDialog('create-profile');
+              setState('creating-profile');
+            }}
           >
             <div className='w-16 h-16 rounded-full bg-gray-600 mx-auto mb-4 flex items-center justify-center'>
               <svg width='20' height='20' viewBox='0 0 12 12' fill='none' xmlns='http://www.w3.org/2000/svg'>

@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { DialogStoreProvider } from 'src/providers/dialogStoreProvider';
+import { IPCStoreProvider } from 'src/providers/ipcStoreProvider';
 import { ProfileStoreProvider } from 'src/providers/profileStoreProvider';
 
 import Dialogs from './Dialogs';
@@ -19,8 +20,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
 function Providers({ children }: { children: React.ReactNode }) {
   return (
-    <DialogStoreProvider>
-      <ProfileStoreProvider>{children}</ProfileStoreProvider>
-    </DialogStoreProvider>
+    <IPCStoreProvider>
+      <DialogStoreProvider>
+        <ProfileStoreProvider>{children}</ProfileStoreProvider>
+      </DialogStoreProvider>
+    </IPCStoreProvider>
   );
 }

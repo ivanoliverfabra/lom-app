@@ -1,7 +1,7 @@
 /* eslint-disable import/order */
 import path from 'path';
 
-import { MakerDMG } from '@electron-forge/maker-dmg';
+import { MakerDMG, MakerDMGConfig } from '@electron-forge/maker-dmg';
 import { MakerSquirrel } from '@electron-forge/maker-squirrel';
 import { FusesPlugin } from '@electron-forge/plugin-fuses';
 import { VitePlugin } from '@electron-forge/plugin-vite';
@@ -44,7 +44,7 @@ const config: ForgeConfig = {
           },
           { x: 466, y: 240, type: 'link', path: '/Applications' },
         ],
-      },
+      } as MakerDMGConfig,
       ['darwin'],
     ),
   ],

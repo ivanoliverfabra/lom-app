@@ -32,3 +32,15 @@ export async function getProfile(db: SQLite3.Database, profileId: number): Promi
     });
   });
 }
+
+export async function getProfiles(db: SQLite3.Database): Promise<Profile[]> {
+  return new Promise<Profile[]>((resolve, reject) => {
+    db.all<Profile>('SELECT * FROM profiles', (err, rows) => {
+      if (err) {
+        reject(err);
+        return;
+      }
+      resolve(rows);
+    });
+  });
+}
